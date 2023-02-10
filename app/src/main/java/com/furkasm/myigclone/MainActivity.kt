@@ -21,12 +21,41 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-
         auth = Firebase.auth
+
+
+        val currentUser = auth.currentUser
+
+        if(currentUser != null){
+            val intent = Intent(this,RecyclerViewActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
 
     }
 
+    fun clickedSıgnIn(view: View){
+        val email  = binding.editTextEmail.text.toString()
+        val password = binding.editTextPassword.text.toString()
 
+        if (email.equals("") || password.equals("")){
+            Toast.makeText(this,"Empty area",Toast.LENGTH_LONG).show()
+        }else {
+            auth.signInWithEmailAndPassword(email,password)
+                .addOnSuccessListener {
+                   // if (email == binding.editTextEmail.text.toString() && password == binding.editTextPassword.text.toString()){
+                   // firebase is doing that actually
+                    val intent = Intent(this@MainActivity,RecyclerViewActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                  //  }
+                }.addOnFailureListener {
+                    Toast.makeText(this@MainActivity,it.localizedMessage,Toast.LENGTH_LONG).show()
+                }
+        }
+
+    }
 
     fun clickedSıgnUp(view : View){
       //  val email : String? = binding.editTextEmail.text.toString()
